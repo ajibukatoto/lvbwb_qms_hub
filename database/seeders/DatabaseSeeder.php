@@ -3,23 +3,30 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $this->call([
+            QmsPermissionSeeder::class,
         ]);
+
+        $user = User::where(
+            'email',
+            'admin@lvbwb.go.tz'
+        )->first();
+
+        if (! $user) {
+            $user = User::create([
+                'name' => 'QMS System Administrator',
+                'email' => 'admin@lvbwb.go.tz',
+                'password' => 'ChangeMe@12345',
+                'is_active' => true,
+            ]);
+        }
+
+        $user->assignRole('Super Admin');
     }
 }

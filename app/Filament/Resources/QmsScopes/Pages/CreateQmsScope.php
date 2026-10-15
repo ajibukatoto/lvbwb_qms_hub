@@ -12,9 +12,15 @@ class CreateQmsScope extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
+        // Automatically record the logged-in user's ID.
         $data['prepared_by'] = Auth::id();
 
         return $data;
     }
-}
 
+    protected function getRedirectUrl(): string
+    {
+        // Return to the QMS Scopes table after saving.
+        return QmsScopeResource::getUrl('index');
+    }
+}

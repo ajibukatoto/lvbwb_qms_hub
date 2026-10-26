@@ -16,4 +16,9 @@ class EditQualityObjective extends EditRecord
             DeleteAction::make(),
         ];
     }
+
+    protected function getRedirectUrl(): string
+    {
+        return QualityObjectiveResource::getUrl('index');
+    }
 }

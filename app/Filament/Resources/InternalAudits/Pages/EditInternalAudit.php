@@ -16,4 +16,9 @@ class EditInternalAudit extends EditRecord
             DeleteAction::make(),
         ];
     }
+
+    protected function getRedirectUrl(): string
+    {
+        return InternalAuditResource::getUrl('index');
+    }
 }

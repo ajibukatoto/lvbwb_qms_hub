@@ -13,7 +13,13 @@ class EditAuditFinding extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            DeleteAction::make(),
+            DeleteAction::make()
+                ->visible(fn (): bool => \Illuminate\Support\Facades\Gate::allows('audit-findings.update')),
         ];
+    }
+
+    protected function getRedirectUrl(): string
+    {
+        return AuditFindingResource::getUrl('index');
     }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class AuditFinding extends Model
 {
@@ -43,6 +44,10 @@ class AuditFinding extends Model
             'internal_audit_id'
         );
     }
+    public function findings(): HasMany
+{
+    return $this->hasMany(AuditFinding::class);
+}
 
     public function creator(): BelongsTo
     {

@@ -1,67 +1,24 @@
-
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+namespace App\Filament\Resources\AuditFindings\Pages;
 
-return new class extends Migration
+use App\Filament\Resources\AuditFindings\AuditFindingResource;
+use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Support\Facades\Auth;
+
+class CreateAuditFinding extends CreateRecord
 {
-    public function up(): void
+    protected static string $resource = AuditFindingResource::class;
+
+    protected function mutateFormDataBeforeCreate(array $data): array
     {
-        Schema::create('audit_findings', function (Blueprint $table) {
-            $table->id();
+        $data['created_by'] = Auth::id();
 
-            $table->string('finding_reference')->unique();
-
-            $table->foreignId('internal_audit_id')
-                ->constrained('internal_audits')
-                ->cascadeOnDelete();
-
-            $table->string('finding_title');
-
-            $table->string('finding_type')->default('Observation');
-
-            $table->string('iso_clause')->nullable();
-
-            $table->text('finding_description');
-
-            $table->text('objective_evidence')->nullable();
-
-            $table->text('requirement')->nullable();
-
-            $table->text('corrective_action_required')->nullable();
-
-            $table->string('responsible_person')->nullable();
-
-            $table->date('target_closure_date')->nullable();
-
-            $table->string('status')->default('Open');
-
-            $table->text('root_cause')->nullable();
-
-            $table->text('closure_evidence')->nullable();
-
-            $table->date('closed_at')->nullable();
-
-            $table->string('verified_by')->nullable();
-
-            $table->text('verification_notes')->nullable();
-
-            $table->foreignId('created_by')
-                ->nullable()
-                ->constrained('users')
-                ->nullOnDelete();
-
-            $table->timestamps();
-
-            $table->index(['finding_type', 'status']);
-            $table->index('target_closure_date');
-        });
+        return $data;
     }
 
-    public function down(): void
+    protected function getRedirectUrl(): string
     {
-        Schema::dropIfExists('audit_findings');
+        return AuditFindingResource::getUrl('index');
     }
-};
+}

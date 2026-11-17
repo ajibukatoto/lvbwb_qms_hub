@@ -16,4 +16,9 @@ class EditNonconformity extends EditRecord
             DeleteAction::make(),
         ];
     }
+
+    protected function getRedirectUrl(): string
+    {
+        return NonconformityResource::getUrl('index');
+    }
 }

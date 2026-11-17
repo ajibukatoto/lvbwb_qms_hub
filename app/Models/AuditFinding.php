@@ -9,34 +9,29 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class AuditFinding extends Model
 {
     protected $fillable = [
-        'finding_reference',
         'internal_audit_id',
-        'finding_title',
+        'title',
+        'description',
         'finding_type',
         'iso_clause',
-        'finding_description',
         'objective_evidence',
-        'requirement',
-        'corrective_action_required',
+        'recommendation',
         'responsible_person',
-        'target_closure_date',
+        'target_date',
         'status',
-        'root_cause',
-        'closure_evidence',
-        'closed_at',
-        'verified_by',
-        'verification_notes',
         'created_by',
     ];
 
     protected function casts(): array
     {
         return [
-            'target_closure_date' => 'date',
-            'closed_at' => 'date',
+            'target_date' => 'date',
         ];
     }
 
+    /**
+     * Audit finding belongs to an internal audit.
+     */
     public function internalAudit(): BelongsTo
     {
         return $this->belongsTo(
@@ -44,11 +39,21 @@ class AuditFinding extends Model
             'internal_audit_id'
         );
     }
-    public function findings(): HasMany
-{
-    return $this->hasMany(AuditFinding::class);
-}
 
+    /**
+     * Audit finding may have many nonconformities.
+     */
+    public function nonconformities(): HasMany
+    {
+        return $this->hasMany(
+            Nonconformity::class,
+            'audit_finding_id'
+        );
+    }
+
+    /**
+     * User who created the audit finding.
+     */
     public function creator(): BelongsTo
     {
         return $this->belongsTo(

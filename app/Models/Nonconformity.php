@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -37,7 +37,10 @@ class Nonconformity extends Model
             'closed_date' => 'date',
         ];
     }
-
+public function nonconformities(): HasMany
+{
+    return $this->hasMany(Nonconformity::class);
+}
     public function auditFinding(): BelongsTo
     {
         return $this->belongsTo(

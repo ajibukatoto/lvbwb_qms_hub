@@ -85,13 +85,11 @@ class NonconformityResource extends Resource
                         ->default('Internal Audit')
                         ->required(),
 
-                    Select::make('audit_finding_id')
-                        ->label('Related Audit Finding (Optional)')
-                        ->relationship('auditFinding', 'finding_reference')
-                        ->searchable()
-                        ->preload()
-                        ->nullable(),
-
+                   Select::make('audit_finding_id')
+    ->label('Related Audit Finding (Optional)')
+    ->options([])
+    ->searchable()
+    ->nullable(),
                     TextInput::make('department_or_process')
                         ->label('Department / Process')
                         ->required()

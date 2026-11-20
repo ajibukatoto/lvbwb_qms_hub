@@ -9,3 +9,4 @@ class EditCorrectiveAction extends EditRecord
 {
     protected static string $resource = CorrectiveActionResource::class;
 }
+

@@ -20,8 +20,6 @@ class ManagementReview extends Model
         'chairperson',
         'attendees',
         'agenda',
-
-        // Management Review Inputs
         'previous_actions_status',
         'changes_in_internal_external_issues',
         'customer_satisfaction',
@@ -32,15 +30,11 @@ class ManagementReview extends Model
         'risks_opportunities',
         'resource_adequacy',
         'improvement_opportunities',
-
-        // Management Review Outputs
         'decisions',
         'resource_requirements',
         'improvement_decisions',
         'qms_changes',
         'overall_conclusion',
-
-        // Status and Approval
         'status',
         'prepared_by',
         'approved_by',
@@ -57,27 +51,21 @@ class ManagementReview extends Model
         ];
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Relationship: Management Review has many Action Items
-    |--------------------------------------------------------------------------
-    */
-
+    /**
+     * One Management Review has many Action Items.
+     */
     public function actions(): HasMany
     {
         return $this->hasMany(
-            ManagementReviewAction::class,
+            \App\Models\ManagementReviewAction::class,
             'management_review_id',
             'id'
         );
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Relationship: Management Review belongs to User (Creator)
-    |--------------------------------------------------------------------------
-    */
-
+    /**
+     * Management Review belongs to its creator.
+     */
     public function creator(): BelongsTo
     {
         return $this->belongsTo(

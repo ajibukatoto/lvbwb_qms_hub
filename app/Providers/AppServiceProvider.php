@@ -2,8 +2,12 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\Gate;
+use App\Models\AuditTrail;
+use App\Observers\AuditTrailObserver;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
+use ReflectionClass;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -14,8 +18,26 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        Gate::before(function ($user, $ability) {
-            return $user->hasRole('Super Admin') ? true : null;
-        });
+        $observer = new AuditTrailObserver();
+
+        foreach (File::files(app_path('Models')) as $file) {
+            $class = 'App\\Models\\' . $file->getFilenameWithoutExtension();
+
+            if (!class_exists($class)) {
+                continue;
+            }
+
+            $reflection = new ReflectionClass($class);
+
+            if (
+                $reflection->isAbstract() ||
+                !$reflection->isSubclassOf(Model::class) ||
+                $class === AuditTrail::class
+            ) {
+                continue;
+            }
+
+            $class::observe($observer);
+        }
     }
 }

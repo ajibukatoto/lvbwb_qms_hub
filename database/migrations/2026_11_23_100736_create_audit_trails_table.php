@@ -1,4 +1,3 @@
-
 <?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -17,10 +16,9 @@ return new class extends Migration
                 ->constrained('users')
                 ->nullOnDelete();
 
-            $table->string('event');
-            $table->string('auditable_type');
+            $table->string('event', 50);
+            $table->string('auditable_type')->nullable();
             $table->unsignedBigInteger('auditable_id')->nullable();
-
             $table->string('auditable_label')->nullable();
 
             $table->json('old_values')->nullable();
@@ -32,11 +30,7 @@ return new class extends Migration
 
             $table->timestamps();
 
-            $table->index([
-                'auditable_type',
-                'auditable_id'
-            ]);
-
+            $table->index(['auditable_type', 'auditable_id']);
             $table->index('event');
             $table->index('created_at');
         });
